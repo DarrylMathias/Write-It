@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Ancizar+Serif:ital,wght@0,300..900;1,300..900&display=swap");
+
+* {
+  font-family: "Ancizar Serif", serif;
+  font-size: 18px;
+}
+
+#exampleFormControlInput1{
+    font-size: 1.75rem;
+}
+
+nav, .dropdown, header, .text-bg-dark, .dropdown-menu, .navbar-dark{
+  background-color: #343a40 !important;
+}
