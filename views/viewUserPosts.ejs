@@ -43,7 +43,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Close</button>
-                                        <p><a href="/deletePost/<%= post._id %>"
+                                        <p><a href="/posts/delete/<%= post._id %>"
                                                 class="link-danger link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mx-3">Delete</a>
                                         </p>
                                     </div>
@@ -66,10 +66,10 @@
                                         <%= post.content %>
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group"><a href="/readPost/<%= post._id %>/<%= userid %>"><button
+                                        <div class="btn-group"><a href="/posts/read/<%= post._id %>"><button
                                                     type="button "
                                                     class="btn btn-sm btn-outline-secondary mx-1">Read</button> </a>
-                                            <a href="/editPost/<%= post._id %>"><button type="button "
+                                            <a href="/posts/edit/<%= post._id %>"><button type="button "
                                                     class="btn btn-sm btn-outline-success mx-1">Edit</button> </a>
                                             <a class="card-link" data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal<%= i %>" style="cursor: pointer;"><button

@@ -15,7 +15,7 @@
     <%- include("partials/navbar") %>
         <div class='m-5'>
             <h1 class="display-5 my-5">Edit profile</h1>
-            <form action='/editProfile/<%= userid %>' method="post" class="w-50" enctype="multipart/form-data">
+            <form action='/users/editProfile' method="post" class="w-50" enctype="multipart/form-data">
                 <% if(error){ %>
                     <div class="alert alert-danger" role="alert">
                         <%= error %>
@@ -23,13 +23,14 @@
                     <%} if(success) { %>
                         <div class="alert alert-success" role="alert">
                             <%= success %> If not redirected automatically in 3 seconds, <a
-                                    href="/profile/<%= userid %>" class="alert-link">click this link</a>
+                                    href="/posts/viewAll" class="alert-link">click this link</a>
                         </div>
                         <% } %>
 
                             <div class="mb-3">
                                 <label for="formFile" class="form-label">Enter profile photo</label>
-                                <input class="form-control" type="file" id="formFile" name = 'profileImage' value = '<%= user?.image || '' %>'>
+                                <input class="form-control" type="file" id="formFile" name='profileImage'
+                                    value='<%= user?.image || '' %>'>
                             </div>
                             <div class="form-floating my-3"> <input type="text" class="form-control" id="floatingInput"
                                     placeholder="John Doe" fdprocessedid="5b0ej" name='name' required
@@ -44,8 +45,8 @@
                                     address</label> </div>
                             <div class="form-floating my-3"> <input type="password" class="form-control"
                                     id="floatingPassword" placeholder="Password" fdprocessedid="00295" name='password'
-                                    
-                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" required>
+                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                                    required>
                                 <label for="floatingPassword">Password</label>
                             </div>
                             <button class="btn btn-primary w-10 py-2" type="submit" fdprocessedid="fl2fhd">Edit
@@ -58,9 +59,9 @@
         <script>
             //Writing ejs tags inside quotes (like html)
             const success = "<%= success%>"
-            const userid = "<%= userid%>"
+            const userid = "<%= user._id%>"
             success && setTimeout(() => {
-                window.location.href = `/viewAllPosts/${userid}`
+                window.location.href = `/posts/viewAll`
             }, 2000);
         </script>
 </body>

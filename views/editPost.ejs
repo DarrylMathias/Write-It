@@ -15,7 +15,7 @@
     <%- include("partials/navbar") %>
     <div class='m-5'>
         <h1 class="display-5 my-5">Edit your post</h1>
-        <form action="/editPost/<%= _id %>" method="post">
+        <form action="/posts/edit/<%= _id %>" method="post">
 
             <% if(error){ %>
                 <div class="alert alert-danger" role="alert">
@@ -23,7 +23,7 @@
                 </div>
                 <%} if(success) { %>
                     <div class="alert alert-success" role="alert">
-                        <%= success %> If not redirected automatically in 3 seconds, <a href="/viewposts/<%= author %>"
+                        <%= success %> If not redirected automatically in 3 seconds, <a href="/posts/viewUser"
                                 class="alert-link">click this link</a>
                     </div>
                     <% } %>
@@ -50,7 +50,7 @@
         const success = "<%= success%>"
         const userid = "<%= author%>"
         success && setTimeout(() => {
-            window.location.href = `/viewposts/${userid}`
+            window.location.href = `/posts/viewUser`
         }, 2000);
     </script>
 </body>

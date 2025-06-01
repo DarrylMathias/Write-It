@@ -31,7 +31,7 @@
                     </p>
                 </div>
                 <div class="col-md-10 mx-auto col-lg-5">
-                    <form action='/login' method="post">
+                    <form action='/users/login' method="post">
                         <% if(loginError){ %>
                             <div class="alert alert-danger" role="alert">
                                 <%= loginError %>
@@ -39,7 +39,7 @@
                             <%} if(success) { %>
                                 <div class="alert alert-success" role="alert">
                                     <%= success %> If not redirected automatically in 3 seconds, <a
-                                            href="/user/<%= userid %>" class="alert-link">click this link</a>
+                                            href="/posts/viewAll" class="alert-link">click this link</a>
                                 </div>
                                 <% } %>
                                     <h1 class="h3 mb-3 fw-normal">Please log in</h1>
@@ -70,9 +70,8 @@
     <script>
         //Writing ejs tags inside quotes (like html)
         const success = "<%= success%>"
-        const userid = "<%= userid%>"
         success && setTimeout(() => {
-            window.location.href = `/user/${userid}`
+            window.location.href = `/posts/viewAll`
         }, 2000);
     </script>
 </body>

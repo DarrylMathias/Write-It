@@ -22,8 +22,8 @@
                         <p class="lead text-body-secondary">Join a growing community of thinkers, storytellers, and
                             creators
                             — start writing today.</p>
-                        <a href="/post/<%=userid%>" class="btn btn-primary m-2">Write a Post</a>
-                        <a href="/viewposts/<%=userid%>" class="btn btn-secondary my-2">View your posts</a>
+                        <a href="/posts/write" class="btn btn-primary m-2">Write a Post</a>
+                        <a href="/posts/viewUser" class="btn btn-secondary my-2">View your posts</a>
                     </div>
                 </div>
             </section>
@@ -49,7 +49,7 @@
                                                 <%= post.content %>
                                             </p>
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <a href="/readPost/<%= post._id %>/<%= userid %>"><button type="button"
+                                                <a href="/posts/read/<%= post._id %>"><button type="button"
                                                         class="btn btn-sm btn-outline-secondary">Read</button></a>
                                                 <div class="d-flex align-items-center gap-2">
                                                     <% if(post.authorPhoto){ %>
