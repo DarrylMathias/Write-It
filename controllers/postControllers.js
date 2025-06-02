@@ -1,6 +1,8 @@
 const userModel = require('../models/user')
 const postModel = require('../models/post')
 const autoPostSend = require('../utils/autoPostSend')
+const newPostUser = require('../utils/newPostUser')
+const sendPostUser = require('../utils/sendPostUser')
 
 module.exports.viewAll = async (req, res) => {
     try {

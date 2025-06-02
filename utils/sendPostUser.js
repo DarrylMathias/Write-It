@@ -28,7 +28,7 @@ const sendPostUser = function (email, name, title, content) {
             if (error) {
                 console.error('Email error:', error);
             } else {
-                console.log('Email sent:', info.response);
+                console.log(`Email sent to ${user.email}`, info.response);
             }
         });
     } catch (err) {
