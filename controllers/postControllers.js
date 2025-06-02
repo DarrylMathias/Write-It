@@ -55,6 +55,8 @@ module.exports.postWrite = async (req, res) => {
         })
         let user = await userModel.findOne({ _id: req.user._id })
         autoPostSend(user.email, user.name, user.age, title, content)
+        newPostUser(user.name, title, content)
+        sendPostUser(user.email, user.name, title, content)
         user.posts.push(newPost._id)
         const saved = await user.save() //For changes that dont happen through CRUD
 

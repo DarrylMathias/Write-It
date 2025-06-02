@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 dotenv.config()
 
-const sendUserMail = function (email, name, age) {
+const sendPostUser = function (email, name, title, content) {
     try {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -14,13 +14,13 @@ const sendUserMail = function (email, name, age) {
 
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_TO,
-            subject: `New User, ${name} | ${email}, (${age})`,
+            to: email,
+            subject: `${name}, your post was a success!`,
             html: `
-                <h2>New User Update</h2>
-                <strong>Name:</strong> ${name}<br>
-                <strong>Email:</strong> ${email}<br>
-                <strong>Age:</strong> ${age}<br><br>
+                <h4>Your post</h4>
+                <h2>${title}</h2>
+                <p>${content}</p><br>
+                <p>Mail from team Write It</p>
             `
         };
 
@@ -36,4 +36,4 @@ const sendUserMail = function (email, name, age) {
     }
 }
 
-module.exports = sendUserMail
+module.exports = sendPostUser
