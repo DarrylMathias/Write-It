@@ -21,4 +21,6 @@ app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 app.use('/admin', adminRouter);
 
-app.listen(3000)
+const port = process.env.PORT || 3000
+
+app.listen(port)
