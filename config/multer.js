@@ -1,9 +1,18 @@
   const multer = require('multer')
   const path = require('path')
 
+  const uploadDir = path.join(__dirname, '../public/images/uploads');
+
+  if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+      console.log('Created folder');
+      
+  }
+
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'public/images/uploads')
+      const uploadPath = path.join(__dirname, '../public/images/uploads');
+      cb(null, uploadPath)
     },
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)

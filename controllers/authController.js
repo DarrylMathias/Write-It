@@ -140,11 +140,7 @@ module.exports.postEditUser = async (req, res) => {
                                 const filePath = path.join(__dirname, '../public/images/uploads', req.file.filename);
                                 uploadedFile = await uploadFile(filePath, req.file.filename);
                                 fs.unlink(filePath, (err) => {
-                                    if (err) {
-                                        console.error('Error deleting local file:', err);
-                                    } else {
-                                        console.log('Local file deleted:', filePath);
-                                    }
+                                    (err) ? console.error('Error deleting local file:', err) : console.log('Local file deleted:', filePath);
                                 });
                                 console.log(`Image uploaded at ${uploadedFile.url}`);
 
@@ -153,6 +149,7 @@ module.exports.postEditUser = async (req, res) => {
                                 return res.render('editProfile', { error: `Error uploading ${err.message}`, success: null, name: user.name, user: user })
                             }
                         }
+
                         const newUser = await userModel.findOneAndUpdate({ _id: user._id }, {
                             name,
                             age,
