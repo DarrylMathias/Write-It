@@ -24,7 +24,7 @@
                         class="d-flex justify-content-start align-content-center align-items-center flex-wrap gap-3 mb-1">
 
                         <% if(author.image){ %>
-                            <p><img src="/images/uploads/<%= author.image %>" height="50" style="border-radius: 50%;"
+                            <p><img src="<%= author.image %>" height="50" style="border-radius: 50%;"
                                     alt="avatar"></p>
                             <% }else{ %>
                                 <p><img src="https://api.dicebear.com/9.x/initials/svg?seed=<%= author.name %>&radius=50&size=45&backgroundType=gradientLinear&fontSize=44"

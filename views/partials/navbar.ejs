@@ -114,7 +114,7 @@
                 <div class="d-flex align-items-center gap-5">
                     <div>
                         <% if(user.image){ %>
-                            <img src="/images/uploads/<%= user.image %>" height="40" style="border-radius: 50%;" alt="avatar">
+                            <img src="<%= user.image %>" height="40" style="border-radius: 50%;" alt="avatar">
                             <% }else{ %>
                                 <img src="https://api.dicebear.com/9.x/initials/svg?seed=<%= name %>&radius=50&size=40&backgroundType=gradientLinear&fontSize=44"
                                     alt="avatar" />

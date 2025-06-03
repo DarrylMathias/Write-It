@@ -1,6 +1,9 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
+const uploadFile = require('../utils/uploadLogicImagekit')
+const path = require('path')
+const fs = require('fs')
 
 const upload = require('../config/multer')
 const multer = require('multer')
@@ -104,7 +107,7 @@ module.exports.logoutUser = (req, res) => {
     } catch (err) {
         res.send(`Error : ${err.message}`)
         console.log(`Error : ${err}`);
-    }``
+    } ``
 }
 
 module.exports.getEditUser = async (req, res) => {
@@ -128,10 +131,32 @@ module.exports.postEditUser = async (req, res) => {
                 const { name, age, password } = req.body
                 bcrypt.genSalt(10, function (err, salt) {
                     bcrypt.hash(password, salt, async function (err, hash) {
+
+                        // Imagekit storage logic
+
+                        let uploadedFile = { url: user.image }; // fallback in case no upload
+                        if (req.file) {
+                            try {
+                                const filePath = path.join(__dirname, '../public/images/uploads', req.file.filename);
+                                uploadedFile = await uploadFile(filePath, req.file.filename);
+                                fs.unlink(filePath, (err) => {
+                                    if (err) {
+                                        console.error('Error deleting local file:', err);
+                                    } else {
+                                        console.log('Local file deleted:', filePath);
+                                    }
+                                });
+                                console.log(`Image uploaded at ${uploadedFile.url}`);
+
+                            } catch (err) {
+                                console.log(err);
+                                return res.render('editProfile', { error: `Error uploading ${err.message}`, success: null, name: user.name, user: user })
+                            }
+                        }
                         const newUser = await userModel.findOneAndUpdate({ _id: user._id }, {
                             name,
                             age,
-                            image: req.file?.filename || user.image, //Fallback
+                            image: uploadedFile.url,
                             password: hash
                         }, { new: true })
 
