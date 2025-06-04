@@ -71,7 +71,7 @@
                         <%= user.age %>
                     </td>
                     <% if(user.image){ %>
-                        <td><img src="/images/uploads/<%= user.image %>" alt="img" height="30"></td>
+                        <td><img src="<%= user.image %>" alt="img" height="30"></td>
                         <% }else{ %>
 
                             <td>No Image</td>
@@ -145,7 +145,7 @@
                         <a href="/admin/readPost/<%= post._id %>"><%= post.content.slice(0,100) + '...' %></a>
                     </td>
                     <% if(post.image){ %>
-                        <td><img src="/images/uploads/<%= post.image %>" alt="img" height="30"></td>
+                        <td><img src="<%= post.image %>" alt="img" height="30"></td>
                         <% }else{ %>
 
                             <td>No Image</td>
