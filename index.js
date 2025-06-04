@@ -6,21 +6,21 @@ const usersRouter = require('./routes/usersRouter')
 const postsRouter = require('./routes/postsRouter')
 const adminRouter = require('./routes/adminRouter')
 const index = require('./routes/index')
-const {rateLimit} = require('express-rate-limit')
+// const {rateLimit} = require('express-rate-limit')
 
-const limiter = rateLimit({
-	windowMs: 60 * 60 * 1000,
-	limit: 100,
-	standardHeaders: 'draft-8',
-	legacyHeaders: false
-})
+// const limiter = rateLimit({
+// 	windowMs: 60 * 60 * 1000,
+// 	limit: 100,
+// 	standardHeaders: 'draft-8',
+// 	legacyHeaders: false
+// })
 
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
-app.use(limiter)
+// app.use(limiter)
 
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, 'public')))
