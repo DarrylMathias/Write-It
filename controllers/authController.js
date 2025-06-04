@@ -13,7 +13,8 @@ const autoUserSend = require('../utils/autoUserSend')
 
 module.exports.createUser = async (req, res) => {
     try {
-        const { name, email, age, password } = req.body
+        const { name, email, age, password} = req.body
+        if (req.body.nickname) return res.status(403).send("Bot detected");
         const user = await userModel.findOne({ email })
         if (user) {
             res.render('index', { signinError: "User already exists.. Try with a different email or Login", success: null, userid: null })
@@ -73,6 +74,7 @@ module.exports.getLoginUser = async (req, res) => {
 module.exports.postLoginUser = async (req, res) => {
     try {
         const { email, password } = req.body
+        if (req.body.nickname) return res.status(403).send("Bot detected");
         const userExists = await userModel.findOne({ email })
 
         if (!userExists) {
@@ -129,6 +131,7 @@ module.exports.postEditUser = async (req, res) => {
             else {
                 // Hash password
                 const { name, age, password } = req.body
+                if (req.body.nickname) return res.status(403).send("Bot detected");
                 bcrypt.genSalt(10, function (err, salt) {
                     bcrypt.hash(password, salt, async function (err, hash) {
 

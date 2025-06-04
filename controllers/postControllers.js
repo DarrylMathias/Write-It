@@ -64,7 +64,7 @@ module.exports.postWrite = async (req, res) => {
             }
             else {
                 const { title, content } = req.body
-
+                if (req.body.nickname) return res.status(403).send("Bot detected");
                 // Imagekit logic
                 let uploadedFile = { url: '' }; // fallback in case no upload
                 let filePath = ''
@@ -172,7 +172,7 @@ module.exports.postEdit = async (req, res) => {
             }
             else {
                 const { title, content } = req.body
-
+                if (req.body.nickname) return res.status(403).send("Bot detected");
                 // Imagekit logic
                 let uploadedFile = { url: '' }; // fallback in case no upload
                 let filePath = ''
