@@ -15,7 +15,7 @@
     <%- include("partials/navbar") %>
         <main>
             <div class="col">
-                <div class="row row-lg-1 mx-5">
+                <div class="row row-lg-1 mx-3">
                     <h3 class="display-3 mt-4 mb-3">
                         <%= post.title %>
                     </h3>
@@ -65,7 +65,7 @@
 
                     <% if(post.image){ %>
                         <div class="my-3 d-flex justify-content-center">
-                            <img src="<%= post.image %>" alt="" width="750">
+                            <img src="<%= post.image %>" alt="" width="750" class="mw-100">
                         </div>
                         <%}%>
                             <p class="lead mt-5 mb-5"><%- post.content.replace(/\n/g, '<br>' ) %></p>
