@@ -13,7 +13,7 @@
 
 <body>
     <%- include("partials/navbar") %>
-        <div class='m-5'>
+        <div class='m-4'>
             <h1 class="display-5 my-5">Let's write a post, <%= name %>!</h1>
             <form action="/posts/write" method="post">
 
@@ -23,23 +23,30 @@
                     </div>
                     <%} if(success) { %>
                         <div class="alert alert-success" role="alert">
-                            <%= success %> If not redirected automatically in 3 seconds, <a
-                                    href="/posts/viewAll" class="alert-link">click this link</a>
+                            <%= success %> If not redirected automatically in 3 seconds, <a href="/posts/viewAll"
+                                    class="alert-link">click this link</a>
                         </div>
                         <% } %>
-                        <input type="text" name="nickname" style="display:none;">
+                            <input type="text" name="nickname" style="display:none;">
+                            <div class="alert alert-success statusMessage d-none" role="alert" >
+                            </div>
                             <div class="mb-4">
-                                <label for="exampleFormControlInput1" class="form-label">What's on your mind?</label>
+                                <label for="exampleFormControlInput1" class="form-label">What's on your
+                                    mind?</label>
                                 <input type="text" class="form-control display-2" id="exampleFormControlInput1"
                                     placeholder="" required name='title' minlength="10" maxlength="100">
                             </div>
                             <div class="mb-4">
-                                <label for="formFile" class="form-label">Enter photo for post&nbsp; &nbsp; &nbsp;(Optional : If not selected, we'll auto add an AI image to increase viewership)</label>
+                                <label for="formFile" class="form-label">Enter photo for
+                                    post<br>(<strong><u>Optional</u> :</strong> If not selected, we'll auto add
+                                    an
+                                    <strong>AI image</strong> to increase viewership)</label>
                                 <input class="form-control" type="file" id="formFile" name='postImage'
                                     value='<%= user?.image || '' %>'>
                             </div>
                             <div class="mb-4">
-                                <label for="exampleFormControlTextarea1" class="form-label">Add some details...</label>
+                                <label for="exampleFormControlTextarea1" class="form-label">Add some
+                                    details...</label>
                                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" required
                                     name='content' minlength="30" maxlength="5000"></textarea>
                             </div>
@@ -50,6 +57,25 @@
             integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
             </script>
         <script>
+            const form = document.querySelector('form');
+            const status = document.querySelector('.statusMessage');
+            const button = form.querySelector('button[type="submit"]');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                if (status) {
+                    status.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Generating your image, please wait...`;
+                    status.classList.remove('d-none');
+                }
+
+                button.disabled = true;
+
+                setTimeout(() => {
+                        form.submit();
+                }, 1000);
+            })
+
             //Writing ejs tags inside quotes (like html)
             const success = "<%= success%>"
             const userid = "<%= user._id%>"

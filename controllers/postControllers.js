@@ -8,6 +8,8 @@ const upload = require('../config/multer')
 const multer = require('multer')
 const uploadFile = require('../utils/uploadLogicImagekit')
 const fs = require('fs')
+const dotenv = require('dotenv')
+dotenv.config()
 
 module.exports.viewAll = async (req, res) => {
     try {
@@ -56,10 +58,10 @@ module.exports.postWrite = async (req, res) => {
         upload.single('postImage')(req, res, async function (err) {
             const user = await userModel.findOne({ _id: req.user._id })
             if (err instanceof multer.MulterError) {
-                res.render('post', { name: user.name, error: `Error uplading : ${err}`, success: null, user })
+                res.render('post', { name: user.name, error: `Error uploading : ${err}`, success: null, user })
                 console.log('Multer error');
             } else if (err) {
-                res.render('post', { name: user.name, error: `Error uplading : ${err}`, success: null, user })
+                res.render('post', { name: user.name, error: `Error uploading : ${err}`, success: null, user })
                 console.log('Unknown error');
             }
             else {
@@ -96,9 +98,11 @@ module.exports.postWrite = async (req, res) => {
                     content,
                     image: uploadedFile.url
                 })
-                autoPostSend(user.email, user.name, user.age, title, content)
-                newPostUser(user.name, title, content)
-                sendPostUser(user.email, user.name, title, content)
+                if (process.env.NODE_ENV === 'production') {
+                    autoPostSend(user.email, user.name, user.age, title, content)
+                    newPostUser(user.name, title, content)
+                    sendPostUser(user.email, user.name, title, content)
+                }
                 user.posts.push(newPost._id)
                 const saved = await user.save() //For changes that dont happen through CRUD
 
