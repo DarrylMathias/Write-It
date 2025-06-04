@@ -35,6 +35,11 @@
                                 value="<%= title %>">
                         </div>
                         <div class="mb-4">
+                                <label for="formFile" class="form-label">Enter photo for post&nbsp; &nbsp; &nbsp;(Optional : If not selected, we'll auto add an AI image to increase viewership)</label>
+                                <input class="form-control" type="file" id="formFile" name='profileImage'
+                                    value='<%= user?.image || '' %>'>
+                            </div>
+                        <div class="mb-4">
                             <label for="exampleFormControlTextarea1" class="form-label">Add some details...</label>
                             <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" required
                                 name='content' minlength="30" maxlength="5000"><%= content %></textarea>

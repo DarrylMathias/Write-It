@@ -142,7 +142,7 @@ module.exports.postEditUser = async (req, res) => {
                                 fs.unlink(filePath, (err) => {
                                     (err) ? console.error('Error deleting local file:', err) : console.log('Local file deleted:', filePath);
                                 });
-                                console.log(`Image uploaded at ${uploadedFile.url}`);
+                                console.log(`Profile image uploaded at ${uploadedFile.url}`);
 
                             } catch (err) {
                                 console.log(err);

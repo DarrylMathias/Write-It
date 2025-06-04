@@ -3,6 +3,11 @@ const postModel = require('../models/post')
 const autoPostSend = require('../utils/autoPostSend')
 const newPostUser = require('../utils/newPostUser')
 const sendPostUser = require('../utils/sendPostUser')
+const generate = require('../utils/aiImageGeneration.cjs')
+const upload = require('../config/multer')
+const multer = require('multer')
+const uploadFile = require('../utils/uploadLogicImagekit')
+const fs = require('fs')
 
 module.exports.viewAll = async (req, res) => {
     try {
@@ -48,27 +53,64 @@ module.exports.getWrite = async (req, res) => {
 
 module.exports.postWrite = async (req, res) => {
     try {
-        const { title, content } = req.body
-        const newPost = await postModel.create({
-            author: req.user._id,
-            date: Date.now(),
-            title,
-            content
-        })
-        let user = await userModel.findOne({ _id: req.user._id })
-        autoPostSend(user.email, user.name, user.age, title, content)
-        newPostUser(user.name, title, content)
-        sendPostUser(user.email, user.name, title, content)
-        user.posts.push(newPost._id)
-        const saved = await user.save() //For changes that dont happen through CRUD
+        upload.single('postImage')(req, res, async function (err) {
+            const user = await userModel.findOne({ _id: req.user._id })
+            if (err instanceof multer.MulterError) {
+                res.render('post', { name: user.name, error: `Error uplading : ${err}`, success: null, user })
+                console.log('Multer error');
+            } else if (err) {
+                res.render('post', { name: user.name, error: `Error uplading : ${err}`, success: null, user })
+                console.log('Unknown error');
+            }
+            else {
+                const { title, content } = req.body
 
-        if (saved) {
-            res.render('post', { name: user.name, error: null, success: 'Your post has been submitted! 🥳', user })
-            console.log('Wrote post');
-        } else {
-            res.render('post', { name: user.name, error: "Post couldn't be submitted 😔", success: null, user })
-            console.log('Not saved');
-        }
+                // Imagekit logic
+                let uploadedFile = { url: '' }; // fallback in case no upload
+                let filePath = ''
+
+                try {
+
+                    if (req.file) {
+                        filePath = path.join(__dirname, '../public/images/uploads', req.file.filename);
+                        uploadedFile = await uploadFile(filePath, req.file.filename);
+                    } else {
+                        const { filePath, fileName } = await generate(title, content)
+                        uploadedFile = await uploadFile(filePath, fileName);
+                    }
+
+                    fs.unlink(filePath, (err) => {
+                        (err) ? console.error('Error deleting local file:', err) : console.log('Local file deleted:', filePath);
+                    });
+                    console.log(`Post image uploaded at ${uploadedFile.url}`);
+
+                } catch (err) {
+                    console.log(err);
+                    return res.render('post', { name: user.name, error: `Error uplading : ${err}`, success: null, user })
+                }
+
+                const newPost = await postModel.create({
+                    author: req.user._id,
+                    date: Date.now(),
+                    title,
+                    content,
+                    image: uploadedFile.url
+                })
+                autoPostSend(user.email, user.name, user.age, title, content)
+                newPostUser(user.name, title, content)
+                sendPostUser(user.email, user.name, title, content)
+                user.posts.push(newPost._id)
+                const saved = await user.save() //For changes that dont happen through CRUD
+
+                if (saved) {
+                    res.render('post', { name: user.name, error: null, success: 'Your post has been submitted! 🥳', user })
+                    console.log('Wrote post');
+                } else {
+                    res.render('post', { name: user.name, error: "Post couldn't be submitted 😔", success: null, user })
+                    console.log('Not saved');
+                }
+            }
+        })
     } catch (err) {
         res.send(`Error : ${err.message}`)
         console.log(`Error : ${err}`);
@@ -118,21 +160,59 @@ module.exports.getEdit = async (req, res) => {
 
 module.exports.postEdit = async (req, res) => {
     try {
+        let post = postModel.findOne({ _id: req.params.postid })
+        upload.single('postImage')(req, res, async function (err) {
+            const user = await userModel.findOne({ _id: req.user._id })
+            if (err instanceof multer.MulterError) {
+                res.render('editPost', { name: user.name, ...post._doc, error: `Error uploading : ${err}`, success: null, user })
+                console.log('Multer error');
+            } else if (err) {
+                res.render('editPost', { name: user.name, ...post._doc, error: `Unknown error : ${err}`, success: null, user })
+                console.log('Unknown error');
+            }
+            else {
+                const { title, content } = req.body
 
-        const { title, content } = req.body
-        const post = await postModel.findOneAndUpdate({ _id: req.params.postid }, {
-            title,
-            content
+                // Imagekit logic
+                let uploadedFile = { url: '' }; // fallback in case no upload
+                let filePath = ''
+
+                try {
+
+                    if (req.file) {
+                        filePath = path.join(__dirname, '../public/images/uploads', req.file.filename);
+                        uploadedFile = await uploadFile(filePath, req.file.filename);
+                    } else {
+                        const generated = await generate(title, content);
+                        filePath = generated.filePath;
+                        uploadedFile = await uploadFile(filePath, generated.fileName);
+                    }
+
+                    fs.unlink(filePath, (err) => {
+                        (err) ? console.error('Error deleting local file:', err) : console.log('Local file deleted:', filePath);
+                    });
+                    console.log(`Post image uploaded at ${uploadedFile.url}`);
+
+                } catch (err) {
+                    console.log(err);
+                    res.render('editPost', { name: user.name, ...post._doc, error: `Unknown error : ${err}`, success: null, user })
+                }
+
+                post = await postModel.findOneAndUpdate({ _id: req.params.postid }, {
+                    title,
+                    content,
+                    image: uploadedFile.url
+                })
+
+                if (postModel) {
+                    res.render('editPost', { name: user.name, ...post._doc, error: null, success: 'Your post has been edited successfully! 🥳', user })
+                    console.log('Wrote post');
+                } else {
+                    res.render('editPost', { name: user.name, ...post._doc, error: "Post couldn't be edited 😔", success: null, user })
+                    console.log('Not saved');
+                }
+            }
         })
-        const user = await userModel.findOne({ _id: post.author })
-
-        if (postModel) {
-            res.render('editPost', { name: user.name, ...post._doc, error: null, success: 'Your post has been edited successfully! 🥳', user })
-            console.log('Wrote post');
-        } else {
-            res.render('editPost', { name: user.name, ...post._doc, error: "Post couldn't be edited 😔", success: null, user })
-            console.log('Not saved');
-        }
     } catch (err) {
         res.send(`Error : ${err.message}`)
         console.log(`Error : ${err}`);
@@ -174,7 +254,7 @@ module.exports.read = async (req, res) => {
     }
 }
 
-module.exports.like =  async (req, res) => {
+module.exports.like = async (req, res) => {
     try {
         const post = await postModel.findOne({ _id: req.params.postid.trim() })
         const author = await userModel.findOne({ _id: post.author })

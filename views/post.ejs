@@ -28,10 +28,15 @@
                         </div>
                         <% } %>
 
-                            <div class="mb-5">
+                            <div class="mb-4">
                                 <label for="exampleFormControlInput1" class="form-label">What's on your mind?</label>
                                 <input type="text" class="form-control display-2" id="exampleFormControlInput1"
                                     placeholder="" required name='title' minlength="10" maxlength="100">
+                            </div>
+                            <div class="mb-4">
+                                <label for="formFile" class="form-label">Enter photo for post&nbsp; &nbsp; &nbsp;(Optional : If not selected, we'll auto add an AI image to increase viewership)</label>
+                                <input class="form-control" type="file" id="formFile" name='postImage'
+                                    value='<%= user?.image || '' %>'>
                             </div>
                             <div class="mb-4">
                                 <label for="exampleFormControlTextarea1" class="form-label">Add some details...</label>

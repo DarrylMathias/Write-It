@@ -18,7 +18,8 @@ const postSchema = mongoose.Schema({
         // An array of all the users who liked
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
-    }]
+    }],
+    image : String
 })
 
 module.exports = mongoose.model('post', postSchema)
