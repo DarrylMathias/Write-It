@@ -8,14 +8,14 @@ const adminRouter = require('./routes/adminRouter')
 const index = require('./routes/index')
 const dotenv = require('dotenv')
 dotenv.config()
-const {rateLimit} = require('express-rate-limit')
+const { rateLimit } = require('express-rate-limit')
 
 const limiter = rateLimit({
 	windowMs: 60 * 60 * 1000,
 	limit: 100,
 	standardHeaders: 'draft-8',
 	legacyHeaders: false,
- skipSuccessfulRequests: true,
+	skipSuccessfulRequests: true,
 })
 
 const app = express()
@@ -23,9 +23,10 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+app.set('trust proxy', 1); // trust first proxy
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(limiter)
+	app.use(limiter)
 }
 
 app.set('view engine', 'ejs')
