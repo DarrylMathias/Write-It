@@ -8,8 +8,8 @@ const isLoggedIn = async function isLoggedIn(req, res, next) {
                 let token = jwt.verify(req.cookies.token, process.env.JWT_KEY)
                 const user = await userModel.findOne({ _id: token.id })
                 req.user = user
-                next()
                 console.log('Correct cookie in middleware');
+                next()
             } catch (error) {
                 res.redirect('/')
                 console.log(`In middleware, ${error}`);

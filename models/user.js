@@ -11,7 +11,13 @@ const userSchema = mongoose.Schema({
         // Ids of posts written by the user
         type : mongoose.Schema.Types.ObjectId,
         ref : 'post'
-    }]
+    }],
+    isVerified : {
+        type : Boolean,
+        default : false
+    },
+    otp : Number,
+    otpExpiry : Date
 })
 
 module.exports = mongoose.model('user', userSchema)

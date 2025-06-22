@@ -5,10 +5,43 @@
   font-size: 18px;
 }
 
-#exampleFormControlInput1{
-    font-size: 1.75rem;
+#exampleFormControlInput1 {
+  font-size: 1.75rem;
 }
 
-nav, .dropdown, header, .text-bg-dark, .dropdown-menu, .navbar-dark{
+nav,
+.dropdown,
+header,
+.text-bg-dark,
+.dropdown-menu,
+.navbar-dark {
   background-color: #343a40 !important;
+}
+
+.digit-group {
+  input {
+    width: 30px;
+    height: 50px;
+    background-color: lighten(#0f0f1a, 5%);
+    border: none;
+    line-height: 50px;
+    text-align: center;
+    font-size: 24px;
+    font-family: "Raleway", sans-serif;
+    font-weight: 200;
+    color: white;
+    margin: 0 2px;
+  }
+
+  .splitter {
+    padding: 0 5px;
+    color: white;
+    font-size: 24px;
+  }
+}
+
+.prompt {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: white;
 }

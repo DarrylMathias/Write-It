@@ -10,16 +10,16 @@ const multer = require('multer')
 const userModel = require('../models/user')
 const generateToken = require('../utils/generateToken')
 const autoUserSend = require('../utils/autoUserSend')
+const sendOTP = require('../utils/otpSend')
 
 module.exports.createUser = async (req, res) => {
     try {
-        const { name, email, age, password} = req.body
+        const { name, email, age, password } = req.body
         if (req.body.nickname) return res.status(403).send("Bot detected");
         const user = await userModel.findOne({ email })
         if (user) {
             res.render('index', { signinError: "User already exists.. Try with a different email or Login", success: null, userid: null })
             console.log('User exists');
-
         } else {
             // Hash password
             bcrypt.genSalt(10, function (err, salt) {
@@ -33,9 +33,7 @@ module.exports.createUser = async (req, res) => {
                     //Set cookie
                     const token = generateToken(newUser)
                     res.cookie('token', token)
-
-                    autoUserSend(email, name, age)
-                    res.render('index', { signinError: null, success: "Account created successfully. Redirecting.. ", userid: `${newUser._id}` })
+                    res.render('index', { signinError: null, success: "Redirecting to validation", userid: `${newUser._id}` })
                     console.log('User created');
                 });
             });
@@ -43,6 +41,54 @@ module.exports.createUser = async (req, res) => {
     } catch (err) {
         res.send(`Error : ${err.message}`)
         console.log(`Error : ${err}`);
+    }
+}
+
+module.exports.validateUser = async (req, res) => {
+    const user = await userModel.findOne({ _id: req.user._id })
+    const systemOtp = Math.floor(100000 + Math.random() * 900000)
+    user.otp = systemOtp
+    user.otpExpiry = Date.now() + 1000 * 60 * 5
+    await user.save()
+    sendOTP(user.email, systemOtp)
+    res.render('validateUser', {
+        success: null, error: null
+    })
+}
+
+module.exports.postValidateUser = async (req, res) => {
+    const user = await userModel.findOne({ _id: req.user._id })
+    const { digit1, digit2, digit3, digit4, digit5, digit6 } = req.body
+    const userOtp = Number(digit1 + digit2 + digit3 + digit4 + digit5 + digit6)
+    console.log(userOtp);
+    const systemOtp = user.otp
+    console.log(systemOtp);
+    console.log(userOtp === systemOtp);
+
+    if (Date.now() > user.otpExpiry) {
+        console.log('OTP expired');
+        res.render('validateUser', {
+            success: null, error: 'OTP expired.. Refresh page to generate another'
+        })
+    }
+    if (systemOtp === userOtp) {
+        console.log('OTP matches');
+        user.isVerified = true;
+        user.otp = undefined;
+        user.otpExpiry = undefined;
+        await user.save();
+        autoUserSend(user.email, user.name, user.age)
+        console.log('Redirecting to validateUser after success');
+        
+        res.render('validateUser', {
+            success: 'Account verified successfully!', error: null
+        })
+    }
+    else {
+        console.log("OTP didn't match");
+        res.render('validateUser', {
+            success: null, error: 'Could not verify email account. Try again'
+        })
     }
 }
 

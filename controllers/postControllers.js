@@ -13,11 +13,8 @@ dotenv.config()
 
 module.exports.viewAll = async (req, res) => {
     try {
-        const user = await userModel.findOne({
-            _id: req.user._id
-        })
+        const user = req.user
         const posts = await postModel.find().populate('author')
-
         if (posts.length != 0) {
             const allPosts =
                 posts.map((post) => {

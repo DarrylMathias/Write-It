@@ -39,7 +39,7 @@
                             <%} if(success) { %>
                                 <div class="alert alert-success" role="alert">
                                     <%= success %> If not redirected automatically in 3 seconds, <a
-                                            href="/users/viewAll" class="alert-link">click this link</a>
+                                            href="/users/vaildateUser" class="alert-link">click this link</a>
                                 </div>
                                 <% } %>
                                     <input type="text" name="nickname" style="display:none;">
@@ -77,7 +77,7 @@
         //Writing ejs tags inside quotes (like html)
         const success = "<%= success%>"
         success && setTimeout(() => {
-            window.location.href = `/posts/viewAll`
+            window.location.href = `/users/validateUser`
         }, 2000);
     </script>
 </body>

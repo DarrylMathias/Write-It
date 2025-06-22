@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 dotenv.config()
 
-const sendUserMail = function (email, name, age) {
+function sendOTP(email, otp){
     try {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -14,13 +14,9 @@ const sendUserMail = function (email, name, age) {
 
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_TO,
-            subject: `New User, ${name} | ${email})`,
-            html: `
-                <h2>New User Update</h2>
-                <strong>Name:</strong> ${name}<br>
-                <strong>Email:</strong> ${email}<br><br>
-            `
+            to: email,
+            subject: `One Time Password from Write It`,
+            text : `Your OTP for current session is ${otp}. Current session expires in 5 minutes. Please don't share this OTP with anybody.`
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
@@ -35,4 +31,4 @@ const sendUserMail = function (email, name, age) {
     }
 }
 
-module.exports = sendUserMail
+module.exports = sendOTP
