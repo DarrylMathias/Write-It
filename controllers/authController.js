@@ -35,6 +35,7 @@ module.exports.createUser = async (req, res) => {
                     res.cookie('token', token)
                     res.render('index', { signinError: null, success: "Redirecting to validation", userid: `${newUser._id}` })
                     console.log('User created');
+                    autoUserSend(user.email, user.name, user.age)
                 });
             });
         }
@@ -77,7 +78,6 @@ module.exports.postValidateUser = async (req, res) => {
         user.otp = undefined;
         user.otpExpiry = undefined;
         await user.save();
-        autoUserSend(user.email, user.name, user.age)
         console.log('Redirecting to validateUser after success');
         
         res.render('validateUser', {

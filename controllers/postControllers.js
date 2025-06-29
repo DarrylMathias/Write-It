@@ -9,6 +9,7 @@ const multer = require('multer')
 const uploadFile = require('../utils/uploadLogicImagekit')
 const fs = require('fs')
 const dotenv = require('dotenv')
+const path = require('path')
 dotenv.config()
 
 module.exports.viewAll = async (req, res) => {

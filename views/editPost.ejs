@@ -15,7 +15,7 @@
     <%- include("partials/navbar") %>
         <div class='m-4'>
             <h1 class="display-5 my-5">Edit your post</h1>
-            <form action="/posts/edit/<%= _id %>" method="post">
+            <form action="/posts/edit/<%= _id %>" method="post" enctype="multipart/form-data">
 
                 <% if(error){ %>
                     <div class="alert alert-danger" role="alert">
@@ -29,6 +29,8 @@
                         <% } %>
                             <input type="text" name="nickname" style="display:none;">
                             <div class="alert alert-success statusMessage d-none" role="alert" >
+                                
+                            </div>
                             <div class="mb-5">
                                 <label for="exampleFormControlInput1" class="form-label">What's on your mind?</label>
                                 <input type="text" class="form-control display-2" id="exampleFormControlInput1"

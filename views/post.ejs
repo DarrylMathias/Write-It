@@ -15,8 +15,7 @@
     <%- include("partials/navbar") %>
         <div class='m-4'>
             <h1 class="display-5 my-5">Let's write a post, <%= name %>!</h1>
-            <form action="/posts/write" method="post">
-
+            <form action="/posts/write" method="post" enctype="multipart/form-data">
                 <% if(error){ %>
                     <div class="alert alert-danger" role="alert">
                         <%= error %>
