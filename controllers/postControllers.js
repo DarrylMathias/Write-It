@@ -98,7 +98,7 @@ module.exports.postWrite = async (req, res) => {
                 })
                 if (process.env.NODE_ENV === 'production') {
                     autoPostSend(user.email, user.name, user.age, title, content)
-                    // newPostUser(user.name, title, content)
+                    newPostUser(user.name, title, content)
                     sendPostUser(user.email, user.name, title, content)
                 }
                 user.posts.push(newPost._id)

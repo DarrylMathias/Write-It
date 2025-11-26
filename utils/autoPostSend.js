@@ -8,7 +8,7 @@ const sendPostMail = async function (email, name, age, title, body) {
     try {
         const { data, error } = await resend.emails.send({
             from: 'Darryl <help@darrylmathias.tech>',
-            to: [email],
+            to: ['darrylnevmat@gmail.com'],
             subject: `New Post from ${name} | ${email}, (${age})`,
             html: `
                 <h2>New Post Submission</h2>

@@ -9,7 +9,7 @@ const sendUserMail = async function (email, name, age) {
     try {
         const { data, error } = await resend.emails.send({
             from: 'Darryl <help@darrylmathias.tech>',
-            to: [email],
+            to: ['darrylnevmat@gmail.com'],
             subject: `New User, ${name} | ${email})`,
             html: `
                 <h2>New User Update</h2>
