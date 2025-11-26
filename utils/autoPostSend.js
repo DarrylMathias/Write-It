@@ -1,20 +1,14 @@
-const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
+const { Resend } = require('resend')
 dotenv.config()
 
-const sendPostMail = function (email, name, age, title, body) {
-    try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.APP_PASSWORD,
-            },
-        });
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_TO,
+const sendPostMail = async function (email, name, age, title, body) {
+    try {
+        const { data, error } = await resend.emails.send({
+            from: 'Darryl <help@darrylmathias.tech>',
+            to: [email],
             subject: `New Post from ${name} | ${email}, (${age})`,
             html: `
                 <h2>New Post Submission</h2>
@@ -25,15 +19,13 @@ const sendPostMail = function (email, name, age, title, body) {
                 <strong>Body:</strong><br>
                 <p>${body}</p>
             `
-        };
-
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error('Email error:', error);
-            } else {
-                console.log('Email sent:', info.response);
-            }
         });
+
+        if (error) {
+            return console.error({ error });
+        }
+
+        console.log({ data });
     } catch (err) {
         console.error("Failed to send email:", err);
     }
