@@ -57,7 +57,7 @@ module.exports.postWrite = async (req, res) => {
             const user = await userModel.findOne({ _id: req.user._id })
             if (err instanceof multer.MulterError) {
                 res.render('post', { name: user.name, error: `Error uploading : ${err}`, success: null, user })
-                console.log('Multer error');
+                console.log('Multer error', err);
             } else if (err) {
                 res.render('post', { name: user.name, error: `Error uploading : ${err}`, success: null, user })
                 console.log('Unknown error');
@@ -167,7 +167,7 @@ module.exports.postEdit = async (req, res) => {
             const user = await userModel.findOne({ _id: req.user._id })
             if (err instanceof multer.MulterError) {
                 res.render('editPost', { name: user.name, ...post._doc, error: `Error uploading : ${err}`, success: null, user })
-                console.log('Multer error');
+                console.log('Multer error', err);
             } else if (err) {
                 res.render('editPost', { name: user.name, ...post._doc, error: `Unknown error : ${err}`, success: null, user })
                 console.log('Unknown error');

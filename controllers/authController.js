@@ -169,7 +169,7 @@ module.exports.postEditUser = async (req, res) => {
             const user = await userModel.findOne({ _id: req.user._id })
             if (err instanceof multer.MulterError) {
                 res.render('editProfile', { error: `Error uploading ${err}`, success: null, name: user.name, user: user })
-                console.log('Multer error');
+                console.log('Multer error', err);
             } else if (err) {
                 res.render('editProfile', { error: `Error uploading ${err}`, success: null, name: user.name, user: user })
                 console.log('Unknown error');
