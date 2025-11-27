@@ -6,6 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendPostMail = async function (email, name, age, title, body) {
     try {
+        setTimeout(() => { }, 1000);
         const { data, error } = await resend.emails.send({
             from: 'Darryl <help@darrylmathias.tech>',
             to: ['darrylnevmat@gmail.com'],
